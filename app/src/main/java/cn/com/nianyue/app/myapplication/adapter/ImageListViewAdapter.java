@@ -1,4 +1,4 @@
-package cn.com.nianyue.app.myapplication;
+package cn.com.nianyue.app.myapplication.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +10,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.com.nianyue.app.myapplication.R;
 import cn.com.nianyue.app.myapplication.listener.ItemClickListener;
 import cn.com.nianyue.app.myapplication.listener.ItemLongClickListener;
-import cn.com.nianyue.app.myapplication.model.Person;
+import cn.com.nianyue.app.myapplication.model.Post;
 
 /**
  * Created by lu on 2015/12/24.
@@ -31,9 +32,9 @@ public class ImageListViewAdapter extends RecyclerView.Adapter<ImageListViewAdap
         public ViewHolder(View itemView, ItemClickListener clickListener, ItemLongClickListener longClickListener){
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
-            name = (TextView) itemView.findViewById(R.id.person_name);
-            age = (TextView) itemView.findViewById(R.id.person_age);
-            photo = (ImageView) itemView.findViewById(R.id.person_photo);
+            name = (TextView) itemView.findViewById(R.id.post_title);
+            age = (TextView) itemView.findViewById(R.id.post_date);
+            photo = (ImageView) itemView.findViewById(R.id.post_thumbnail);
 
             this.clickListener = clickListener;
             this.longClickListener = longClickListener;
@@ -53,9 +54,9 @@ public class ImageListViewAdapter extends RecyclerView.Adapter<ImageListViewAdap
         }
     }
 
-    private List<Person> persons;
-    public ImageListViewAdapter(List<Person> persons) {
-        this.persons = persons;
+    private List<Post> posts;
+    public ImageListViewAdapter(List<Post> posts) {
+        this.posts = posts;
     }
 
     @Override
@@ -67,15 +68,15 @@ public class ImageListViewAdapter extends RecyclerView.Adapter<ImageListViewAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(persons.get(position).name);
-        holder.age.setText(persons.get(position).age);
-        //holder.photo.setImageResource(persons.get(position).photoId);
-        holder.photo.setImageBitmap(persons.get(position).photo);
+        holder.name.setText(posts.get(position).name);
+        holder.age.setText(posts.get(position).age);
+        //holder.photo.setImageResource(posts.get(position).photoId);
+        holder.photo.setImageBitmap(posts.get(position).photo);
     }
 
     @Override
     public int getItemCount() {
-        return persons.size();
+        return posts.size();
     }
 
     @Override

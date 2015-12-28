@@ -21,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.android.volley.Request;
@@ -40,21 +39,18 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.com.nianyue.app.myapplication.ImageListViewAdapter;
+import cn.com.nianyue.app.myapplication.adapter.ImageListViewAdapter;
 import cn.com.nianyue.app.myapplication.R;
 import cn.com.nianyue.app.myapplication.listener.ItemClickListener;
 import cn.com.nianyue.app.myapplication.listener.ItemLongClickListener;
-import cn.com.nianyue.app.myapplication.model.Person;
+import cn.com.nianyue.app.myapplication.model.Post;
 import cn.com.nianyue.app.myapplication.request.Queue;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, ItemClickListener, ItemLongClickListener {
 
     private String className = getClass().getSimpleName();
-
-    private ImageView imageView;
-    private Button getString, getImage;
-    private List<Person> persons = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
     private ImageListViewAdapter adapter;
 
     private RecyclerView rv;
@@ -65,33 +61,23 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getString = (Button) findViewById(R.id.getString);
-        getImage = (Button) findViewById(R.id.getImage);
-        imageView = (ImageView) findViewById(R.id.imageView);
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setHasFixedSize(true);
 
         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
         rv.setLayoutManager(llm);
 
-        /**
-        personList.add(new Person("Jack", "18 years old", R.mipmap.ic_launcher));
-        personList.add(new Person("Tom", "22 years old", R.mipmap.ic_launcher));
-        personList.add(new Person("LiLei", "24 years old", R.mipmap.ic_launcher));
-        personList.add(new Person("HanMeiMei", "23 years old", R.mipmap.ic_launcher));
-         */
+        posts.add(new Post("Objective-C 笔记片段 -- 基础语法", "2015-12-10 16:26:02", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
+        posts.add(new Post("Jack", "18 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
+        posts.add(new Post("Tom", "22 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
+        posts.add(new Post("LiLei", "24 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
+        posts.add(new Post("HanMeiMei", "23 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
 
-        persons.add(new Person("Jack", "18 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
-        persons.add(new Person("Jack", "18 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
-        persons.add(new Person("Tom", "22 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
-        persons.add(new Person("LiLei", "24 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
-        persons.add(new Person("HanMeiMei", "23 years old", BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
-
-        adapter = new ImageListViewAdapter(persons);
+        adapter = new ImageListViewAdapter(posts);
         rv.setAdapter(adapter);
 
-        getString.setOnClickListener(this);
-        getImage.setOnClickListener(this);
+        //getString.setOnClickListener(this);
+        //getImage.setOnClickListener(this);
 
         adapter.setItemClickListener(this);
         adapter.setItemLongClickListener(this);
@@ -176,13 +162,13 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.getString:getString();break;
-            case R.id.getImage:getImage(); break;
+            //case R.id.getString:getString();break;
+            //case R.id.getImage:getImage(); break;
         }
     }
 
     private void getString () {
-        getString.setEnabled(false);
+        //getString.setEnabled(false);
         String url = "http://httpbin.org/get";
         StringRequest sr = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -193,29 +179,29 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i(className, error.toString());
-                getString.setEnabled(true);
+                //getString.setEnabled(true);
             }
         });
         Queue.getInstance(this).addToRequestQueue(sr);
     }
 
     private void getImage() {
-        getImage.setEnabled(false);
+        //getImage.setEnabled(false);
         final String url = "http://www.33lc.com/article/UploadPic/2012-9/201292811313286051.jpg";
 
         String fileName = md5(url);
         String path = "/Nianyue/cache/";
         File dirToList = new File(Environment.getExternalStorageDirectory(), path);
         File files[] = dirToList.listFiles();
-        persons.clear();
+        posts.clear();
         if(files != null ){
             for (File singleFile:files) {
                 Log.i(className, singleFile.getAbsolutePath());
-                persons.add(new Person(singleFile.getName(), singleFile.getAbsolutePath(), BitmapFactory.decodeFile(singleFile.getAbsolutePath())));
+                posts.add(new Post(singleFile.getName(), singleFile.getAbsolutePath(), BitmapFactory.decodeFile(singleFile.getAbsolutePath())));
             }
         }
 
-        if(persons.size() != 0 ) {
+        if(posts.size() != 0 ) {
             adapter.notifyDataSetChanged();
         }
 
@@ -229,7 +215,7 @@ public class MainActivity extends AppCompatActivity
         if(fileToSave.isFile()) {
             Log.i(className, "Load image from SDCard");
             Bitmap bm = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().toString() + path + fileName);
-            imageView.setImageBitmap(bm);
+            //imageView.setImageBitmap(bm);
         } else {
 
             Log.i(className, "Load image from web");
@@ -254,13 +240,13 @@ public class MainActivity extends AppCompatActivity
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    imageView.setImageBitmap(response);
+                    //imageView.setImageBitmap(response);
                 }
             }, getScreenWidth(), 300, ImageView.ScaleType.FIT_XY, Bitmap.Config.ARGB_8888, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    imageView.setImageResource(R.mipmap.ic_launcher);
-                    getImage.setEnabled(true);
+                    //imageView.setImageResource(R.mipmap.ic_launcher);
+                    //getImage.setEnabled(true);
                 }
             });
             Queue.getInstance(this).addToRequestQueue(ir);
@@ -299,13 +285,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(View view, int position) {
-        Person person = persons.get(position);
-        if(person != null) Snackbar.make(view, person.name, Snackbar.LENGTH_LONG).show();
+        Post post = posts.get(position);
+        if(post != null) Snackbar.make(view, post.name, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onItemLongClick(View view, int position) {
-        Person person = persons.get(position);
-        if(person != null) Snackbar.make(view, person.age, Snackbar.LENGTH_LONG).show();
+        Post post = posts.get(position);
+        if(post != null) Snackbar.make(view, post.age, Snackbar.LENGTH_LONG).show();
     }
 }
